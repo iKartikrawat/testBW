@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 
-const profiles = [
+/* const profiles = [
   {
     "id": 1,
     "name": "A Martinez",
@@ -17,15 +17,12 @@ const profiles = [
     "psyche": "FEVL",
     "image": "https://soulverse.boo.world/images/1.png",
   }
-];
+]; */
 
-module.exports = function() {
+module.exports = function () {
 
-  router.get('/*', function(req, res, next) {
-    res.render('profile_template', {
-      profile: profiles[0],
-    });
-  });
+  router.use('/user', require('./user/router')());
+  router.use('/comment', require('./comment/router')());
 
   return router;
 }
