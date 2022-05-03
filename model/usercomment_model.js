@@ -1,24 +1,29 @@
 const { commentscol } = require("../db/database");
 const { getCounter, counterTypes } = require("./counters_model");
 const { CustomError } = require("../helper/custom_error");
-module.exports = {
-    SORT_TYPES: {
-        RECENT: "_id",
-        BEST: "likes_count",
-    },
 
-    FILTER_TYPES: {
-        MBTI: {
-            mbti: { $ne: null }
-        },
-        ANNEAGRAM: {
-            anneagram: { $ne: null }
-        },
-        ZODIAC: {
-            zodiac: { $ne: null }
-        },
-        null: null
+const SORT_TYPES = {
+    RECENT: "_id",
+    BEST: "likes_count",
+}
+
+const FILTER_TYPES = {
+    MBTI: {
+        mbti: { $ne: null }
     },
+    ENNEAGRAM: {
+        enneagram: { $ne: null }
+    },
+    ZODIAC: {
+        zodiac: { $ne: null }
+    },
+    null: null
+}
+
+module.exports = {
+
+    SORT_TYPES,
+    FILTER_TYPES,
 
     createComment: async (userComment) => {
         userComment.id = await getCounter(counterTypes.TYPE_COMMENT);
@@ -28,6 +33,8 @@ module.exports = {
         else
             throw new CustomError(500, "Error inserting doc to DB!")
     },
+
+    fetchCommentById: (userId) => commentscol().findOne({ id: userId }, { projection: { _id: 0 } }),
 
     commentExists: async (commentId) => (await commentscol().findOne({ id: commentId })) != null,
 
@@ -43,7 +50,7 @@ module.exports = {
         let userComments = [];
         let cursor = commentscol().find({
             on_id,
-            ...((filter) ?  filter:{})
+            ...((filter) ? filter : {})
         }, {
             projection: {
                 _id: 0

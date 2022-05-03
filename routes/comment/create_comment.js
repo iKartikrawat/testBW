@@ -10,11 +10,14 @@ const validateCommentData = (commentData) =>
     (typeof commentData.title == "string" && commentData.title.length > 0) &&
     (typeof commentData.description == "string" && commentData.description.length > 0) &&
     ((commentData.mbti == null) ||
-        MBTI_TYPES.includes(commentData.mbti)) &&
+        MBTI_TYPES.includes(commentData.mbti)
+    ) &&
     ((commentData.enneagram == null) ||
-        ENNEAGRAM_TYPES.includes(commentData.enneagram)) &&
+        ENNEAGRAM_TYPES.includes(commentData.enneagram)
+    ) &&
     ((commentData.zodiac == null) ||
-        ZODIAC_TYPES.includes(commentData.zodiac)) &&
+        ZODIAC_TYPES.includes(commentData.zodiac)
+    ) &&
     typeof commentData.by_id == "number" &&
     typeof commentData.on_id == "number"
 
@@ -28,14 +31,15 @@ module.exports = async (commentData) => {
         zodiac: ifUndef(commentData.zodiac, null),
         on_id: commentData.on_id,
         by_id: commentData.by_id,
-        likes_count:0
+        likes_count: 0
     };
+    
     if (!validateCommentData(commentData))
         throw new ValidationError();
 
     if ((await Promise.all([userExists(commentData.on_id), userExists(commentData.by_id)])
     ).includes(false))
         throw new CustomError(400, "User not found in db!")
-        
+
     return await createComment(commentData);
 }

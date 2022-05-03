@@ -2,12 +2,12 @@ class UserComment {
     
     constructor() {
         this.id=undefined;
-        this.title = undefined;
-        this.description = undefined;
-        this.mbti = undefined;
-        this.enneagram = undefined;
-        this.zodiac = undefined;
-        this.likesCount=0;
+        this.title = null;
+        this.description = null;
+        this.mbti = null;
+        this.enneagram = null;
+        this.zodiac = null;
+        this.likes_count=0;
         this.on_id=undefined;
         this.by_id=undefined;
     }
@@ -42,18 +42,18 @@ class UserComment {
         return this;
     }
 
-    setToId(){
+    setOnId(val){
         this.on_id=val;
         return this;
     }
 
-    setById(){
+    setById(val){
         this.by_id=val;
         return this;
     }
     
     setLikesCount(val){
-        this.likesCount=val;
+        this.likes_count=val;
         return this;
     }
 
@@ -66,7 +66,7 @@ class UserComment {
         zodiac :this.zodiac,
         on_id:this.on_id,
         by_id:this.by_id,
-        likesCount:this.likesCount
+        likes_count:this.likes_count
     })
 
 }

@@ -14,7 +14,6 @@ const { userscol } = require("../db/database");
 const { getCounter, counterTypes } = require("./counters_model");
 
 module.exports = {
-
     /**
      * @param {User} user
      * @returns {Promise<Number>} userId
@@ -34,5 +33,6 @@ module.exports = {
      * @param {Number} userId
      * @returns userDoc
      */
-    fetchUserById: async (userId) => (await userscol().findOne({ id: userId }, { projection: { _id: 0 } }))
+    fetchUserById:  (userId) => userscol().findOne({ id: userId }, { projection: { _id: 0 } }),
+    fetchMiniUserInfoById: (userId) =>  userscol().findOne({ id: userId }, { projection: { image:1,name:1,_id:0 } })
 }

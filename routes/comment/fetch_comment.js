@@ -1,6 +1,6 @@
 const { hasLiked } = require("../../model/like_model");
 const { fetchCommentsByUser, FILTER_TYPES, SORT_TYPES } = require("../../model/usercomment_model");
-const { userExists } = require("../../model/user_model");
+const { userExists, fetchMiniUserInfoById } = require("../../model/user_model");
 
 const { ValidationError, CustomError } = require("../../helper/custom_error");
 
@@ -33,6 +33,16 @@ module.exports = async (data) => {
             (userComment) => hasLiked(userComment.id, data.user_id)
         )
     )).forEach((hasLiked, index) => { userCommentsData.userComments[index].hasLiked = hasLiked });
+    
+    ////to attach userData to the comment
+    (await Promise.all(
+        userCommentsData.userComments.map(
+            (userComment) => fetchMiniUserInfoById(userComment.by_id)
+        )
+    )).forEach((miniUserInfo, index) => { 
+        userCommentsData.userComments[index].name = miniUserInfo.name;
+        userCommentsData.userComments[index].image = miniUserInfo.image;
+     });
 
     return userCommentsData;
 
